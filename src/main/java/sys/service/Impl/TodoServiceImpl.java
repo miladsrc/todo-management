@@ -9,6 +9,9 @@ import sys.exception.ResourceNotFoundException;
 import sys.repository.TodoRepository;
 import sys.service.TodoService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class TodoServiceImpl implements TodoService {
@@ -43,9 +46,20 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoDto getTodo(Long id) {
+
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("todo not found with id " + id));
         return modelMapper.map(todo, TodoDto.class);
+    }
+
+    @Override
+    public List<TodoDto> getAllTodos() {
+
+        List<Todo> todoList = todoRepository.findAll();
+
+        return todoList.stream()
+                .map((todo) -> modelMapper.map(todo, TodoDto.class))
+                .collect(Collectors.toList());
     }
 
 }
