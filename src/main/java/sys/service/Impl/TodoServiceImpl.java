@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sys.dto.TodoDto;
 import sys.entity.Todo;
+import sys.exception.ResourceNotFoundException;
 import sys.repository.TodoRepository;
 import sys.service.TodoService;
 
@@ -24,7 +25,6 @@ public class TodoServiceImpl implements TodoService {
 //                .completed(todoDto.isCompleted())
 //                .description(todoDto.getDescription())
 //                .build();
-
         Todo todo = modelMapper.map(todoDto, Todo.class);
 
         //todo jpa entity
@@ -38,7 +38,14 @@ public class TodoServiceImpl implements TodoService {
 //        todoDtoTwo.setCompleted(todoSaved.isCompleted());
         TodoDto todoDtoTwo = modelMapper.map(todoSaved, TodoDto.class);
 
-
         return todoDtoTwo;
     }
+
+    @Override
+    public TodoDto getTodo(Long id) {
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("todo not found with id " + id));
+        return modelMapper.map(todo, TodoDto.class);
+    }
+
 }
