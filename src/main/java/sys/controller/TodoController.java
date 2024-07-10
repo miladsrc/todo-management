@@ -62,11 +62,17 @@ public class TodoController {
         return ResponseEntity.ok("todo deleted successfully");
     }
 
-    //Build Update Todo REST API
+    //Build Update-confirmed Todo REST API
     @PatchMapping("/update/complete/{id}")
-    public ResponseEntity<TodoDto> updateTodo(@PathVariable("id") Long todoId){
+    public ResponseEntity<TodoDto> updateTodoConfirmed(@PathVariable("id") Long todoId){
         TodoDto updateTodo = todoService.completeTodo(todoId);
         return ResponseEntity.ok(updateTodo);
     }
 
+    //Build Update-not-confirmed Todo REST API
+    @PatchMapping("/update/in-complete/{id}")
+    public ResponseEntity<TodoDto> updateTodoNotConfirmed(@PathVariable("id") Long todoId){
+        TodoDto updateTodo = todoService.inCompleteTodo(todoId);
+        return ResponseEntity.ok(updateTodo);
+    }
 }
