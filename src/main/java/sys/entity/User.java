@@ -8,9 +8,11 @@ import java.util.Set;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Builder
 @Table(name = "users")
 public class User {
     @Id
@@ -28,7 +30,6 @@ public class User {
 
     @Column(nullable = false, unique = true)
     String email;
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users-roles",

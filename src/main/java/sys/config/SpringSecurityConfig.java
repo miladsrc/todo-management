@@ -57,6 +57,7 @@ public class SpringSecurityConfig {
 //                    authorizeRequests.requestMatchers(HttpMethod.PATCH, "/api/**"). hasAnyRole("ADMIN", "USER");
 //                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
 //                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
+                    authorizeRequests.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
                     authorizeRequests.anyRequest().authenticated();
                         }
                 ).httpBasic(Customizer.withDefaults());
