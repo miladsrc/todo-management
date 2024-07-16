@@ -2,8 +2,13 @@ package sys.service.Impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import sys.dto.LoginDTO;
 import sys.dto.RegisterDTO;
 import sys.entity.Role;
 import sys.entity.Todo;
@@ -24,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
 
     @Override
     public String Register(RegisterDTO registerDTO) {
@@ -55,5 +61,17 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         return "User Registered Successfully !";
+    }
+
+    @Override
+    public String Login(LoginDTO loginDTO) {
+
+       Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDTO.getUsernameOrEmail(), loginDTO.getPassword()
+        ));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return "user logged successfully !";
     }
 }
