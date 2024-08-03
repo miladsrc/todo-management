@@ -43,13 +43,12 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-        http.csrf().and()
-                .cors().disable()
-                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.requestMatchers(HttpMethod.GET, "api/").hasRole("ADMIN", "USER"))
-                .cors((cors) -> {
-
-                });
+//        http.csrf().and()
+//                .cors().disable()
+//                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.requestMatchers(HttpMethod.GET, "api/").hasRole("ADMIN", "USER"))
+//                .cors((cors) -> {
+//
+//                });
 
                 http.authorizeHttpRequests((authorizeRequests) -> {
 //                    authorizeRequests.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
@@ -104,11 +103,11 @@ public class SpringSecurityConfig {
         return authentication.getAuthenticationManager();
     }
 
-
-    @Bean
-    public AnonymousFilter anonymousFilter() {
-        return new AnonymousFilter();
-    }
+//
+//    @Bean
+//    public AnonymousFilter anonymousFilter() {
+//        return new AnonymousFilter();
+//    }
 
 
 }
