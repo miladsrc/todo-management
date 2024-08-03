@@ -26,5 +26,5 @@ public class GlobalExceptionHandler {
                 webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 
-    };
+    }
 }

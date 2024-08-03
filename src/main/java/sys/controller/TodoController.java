@@ -43,8 +43,8 @@ public class TodoController {
         List<TodoDto> todoList = todoService.getAllTodos();
 
         //there is two ways for response
-        //and basically secound way is
-        //a short cut to apply for that
+        //and basically second way is
+        //a shortcut to apply for that
 
 //        return new ResponseEntity<>(todoList, HttpStatus.OK);
         return ResponseEntity.ok(todoList);

@@ -5,22 +5,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
-import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasAnyRole;
 
 /* whenever we use @Configuration
  we set spring bean configuration
@@ -44,26 +40,38 @@ public class SpringSecurityConfig {
 
     private UserDetailsService userDetailsService;
 
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorizeRequests) -> {
+        http.csrf().and()
+                .cors().disable()
+                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.requestMatchers(HttpMethod.GET, "api/").hasRole("ADMIN", "USER"))
+                .cors((cors) -> {
+
+                });
+
+                http.authorizeHttpRequests((authorizeRequests) -> {
 //                    authorizeRequests.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
 //                    authorizeRequests.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
 //                    authorizeRequests.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
 //                    authorizeRequests.requestMatchers(HttpMethod.PATCH, "/api/**"). hasAnyRole("ADMIN", "USER");
 //                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
 //                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
-                    authorizeRequests.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
-                    authorizeRequests.anyRequest().authenticated();
+                            authorizeRequests.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
+                            authorizeRequests.anyRequest().authenticated();
                         }
-                ).httpBasic(Customizer.withDefaults());
-
+                ).httpBasic(Customizer.withDefaults())
+                .headers((headers) -> headers.xssProtection(
+                        xXssConfig -> xXssConfig.headerValue(XXssProtectionHeaderWriter
+                                .HeaderValue
+                                .ENABLED_MODE_BLOCK)
+                ).contentSecurityPolicy(cps ->
+                        cps.policyDirectives("script-src 'self'")));
         return http.build();
     }
+
+
 
 
 
@@ -95,5 +103,12 @@ public class SpringSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authentication) throws Exception {
         return authentication.getAuthenticationManager();
     }
+
+
+    @Bean
+    public AnonymousFilter anonymousFilter() {
+        return new AnonymousFilter();
+    }
+
 
 }
