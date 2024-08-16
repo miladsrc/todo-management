@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 @AllArgsConstructor
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class  JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     private JwtTokenProvider jwtTokenProvider;
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         // Get JWT token from Http Request
-        String token  = request.getHeader(request);
+        String token  = request.getHeader(String.valueOf(request));
 
         // Validate Token
         if(!StringUtils.isEmpty(token) && jwtTokenProvider.validateToken(token)) {

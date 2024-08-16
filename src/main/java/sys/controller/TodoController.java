@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import sys.dto.TodoDto;
+import sys.dto.TodoDTO;
 import sys.service.TodoService;
 
 import java.util.List;
@@ -22,15 +22,15 @@ public class TodoController {
     //Build add todo api
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<TodoDto> addTodo(@RequestBody TodoDto todoDto) {
-        TodoDto savedTodo = todoService.addTodo(todoDto);
+    public ResponseEntity<TodoDTO> addTodo(@RequestBody TodoDTO todoDto) {
+        TodoDTO savedTodo = todoService.addTodo(todoDto);
         return new ResponseEntity<>(savedTodo, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/get/{id}")
-    public ResponseEntity<TodoDto> getTodo(@PathVariable("id") Long todoId) {
-        TodoDto savedTodo = todoService.getTodo(todoId);
+    public ResponseEntity<TodoDTO> getTodo(@PathVariable("id") Long todoId) {
+        TodoDTO savedTodo = todoService.getTodo(todoId);
         return new ResponseEntity<>(savedTodo, HttpStatus.OK);
     }
 
@@ -39,8 +39,8 @@ public class TodoController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/getAll")
-    public ResponseEntity<List<TodoDto>> getAllTodos() {
-        List<TodoDto> todoList = todoService.getAllTodos();
+    public ResponseEntity<List<TodoDTO>> getAllTodos() {
+        List<TodoDTO> todoList = todoService.getAllTodos();
 
         //there is two ways for response
         //and basically second way is
@@ -55,8 +55,8 @@ public class TodoController {
     // Build Update Todo REST API
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
-    public ResponseEntity<TodoDto> updateTodo(@RequestBody TodoDto todoDto, @PathVariable("id") Long todoId) {
-        TodoDto updateTodo = todoService.updateTodo(todoDto, todoId);
+    public ResponseEntity<TodoDTO> updateTodo(@RequestBody TodoDTO todoDto, @PathVariable("id") Long todoId) {
+        TodoDTO updateTodo = todoService.updateTodo(todoDto, todoId);
         return ResponseEntity.ok(updateTodo);
     }
 
@@ -71,16 +71,16 @@ public class TodoController {
     //Build Update-confirmed Todo REST API
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PatchMapping("/update/complete/{id}")
-    public ResponseEntity<TodoDto> updateTodoConfirmed(@PathVariable("id") Long todoId){
-        TodoDto updateTodo = todoService.completeTodo(todoId);
+    public ResponseEntity<TodoDTO> updateTodoConfirmed(@PathVariable("id") Long todoId){
+        TodoDTO updateTodo = todoService.completeTodo(todoId);
         return ResponseEntity.ok(updateTodo);
     }
 
     //Build Update-not-confirmed Todo REST API
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PatchMapping("/update/in-complete/{id}")
-    public ResponseEntity<TodoDto> updateTodoNotConfirmed(@PathVariable("id") Long todoId){
-        TodoDto updateTodo = todoService.inCompleteTodo(todoId);
+    public ResponseEntity<TodoDTO> updateTodoNotConfirmed(@PathVariable("id") Long todoId){
+        TodoDTO updateTodo = todoService.inCompleteTodo(todoId);
         return ResponseEntity.ok(updateTodo);
     }
 }

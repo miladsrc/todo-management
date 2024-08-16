@@ -1,21 +1,21 @@
 package sys.service;
 
-import sys.dto.TodoDto;
+import sys.dto.TodoDTO;
 
 import java.util.List;
 
 public interface TodoService {
-    TodoDto addTodo(TodoDto todoDto);
+    TodoDTO addTodo(TodoDTO todoDto);
 
-    TodoDto getTodo(Long id);
+    TodoDTO getTodo(Long id);
 
-    List<TodoDto> getAllTodos();
+    List<TodoDTO> getAllTodos();
 
-    TodoDto updateTodo(TodoDto todoDto, Long id);
+    TodoDTO updateTodo(TodoDTO todoDto, Long id);
 
     void deleteTodo(Long id);
 
-    TodoDto completeTodo(Long id);
+    TodoDTO completeTodo(Long id);
 
-    TodoDto inCompleteTodo(Long id);
+    TodoDTO inCompleteTodo(Long id);
 }
